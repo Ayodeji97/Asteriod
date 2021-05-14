@@ -25,7 +25,7 @@ class MainViewModel : ViewModel() {
 //    val formattedDate = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
 
     init {
-        getAllAsteroid("2015-09-07", "2015-09-09", Constants.API_KEY)
+        getAllAsteroid("2021-05-14", "2021-05-16", Constants.API_KEY)
 
         getNasaImageOfTheDay(Constants.API_KEY)
     }
@@ -33,7 +33,6 @@ class MainViewModel : ViewModel() {
     private fun getAllAsteroid(startDate: String, endDate: String, apiKey: String) {
 
         viewModelScope.launch {
-
             try {
                 val asteroidList =
                     NasaApi.retrofitService.getAllAsteroids(startDate, endDate, apiKey)
@@ -44,7 +43,6 @@ class MainViewModel : ViewModel() {
                 _asteroid.value = result
             } catch (e: Exception) {
                 print(e.toString())
-
                 Log.i("FIRST", "${e.toString()}")
             }
         }
