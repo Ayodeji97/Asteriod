@@ -7,6 +7,10 @@
             name="viewModel"
             type="com.udacity.asteroidradar.main.MainViewModel" />
 
+        <variable
+            name="pictureOfDay"
+            type="com.udacity.asteroidradar.PictureOfDay" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

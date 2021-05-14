@@ -3,6 +3,7 @@ package com.udacity.asteroidradar
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.squareup.picasso.Picasso
 
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
@@ -51,7 +52,6 @@ fun TextView.setAsteroidName (item : Asteroid) {
     }
 }
 
-
 @BindingAdapter("asteroidDate")
 fun TextView.setAsteroidData (item : Asteroid) {
     item?.let {
@@ -69,3 +69,11 @@ fun ImageView.bindStatus (item: Asteroid) {
         })
     }
 }
+
+//@BindingAdapter("imageOfTheDay")
+//fun ImageView.imageOfTheDay (item : PictureOfDay, imageView: ImageView) {
+//
+//    item?.let {
+//        Picasso.with(context).load(item.url).into(imageView)
+//    }
+//}
