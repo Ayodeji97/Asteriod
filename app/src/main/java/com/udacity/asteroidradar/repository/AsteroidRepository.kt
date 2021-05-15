@@ -6,10 +6,13 @@ import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.asDomainModel
+import com.udacity.asteroidradar.database.asPictureOfDayDomainModel
 import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.domain.PictureOfDay
 import com.udacity.asteroidradar.network.NasaApi
 import com.udacity.asteroidradar.network.NetworkAsteroid
-import com.udacity.asteroidradar.network.asDatabaseModel
+import com.udacity.asteroidradar.network.asAsteroidDatabaseModel
+import com.udacity.asteroidradar.network.asPictureOfDayDatabaseModel
 import com.udacity.asteroidradar.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -22,6 +25,9 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
         it.asDomainModel()
     }
 
+    val pictureOfDay : LiveData<PictureOfDay> = Transformations.map(asteroidDatabase.pictureOfDayDao.getPictureOfDay()) {
+        it?.asPictureOfDayDomainModel()
+    }
 
 
     suspend fun refreshAsteroids () {
@@ -29,7 +35,7 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
             try {
 
-                val asteroid = NasaApi.retrofitService.getAllAsteroids("2021-05-14", "2021-05-16", Constants.API_KEY )
+                val asteroid = NasaApi.retrofitService.getAllAsteroids("2021-05-14", "2021-05-16", Constants.API_KEY)
 
                 val parsedAsteroids = parseAsteroidsJsonResult(JSONObject(asteroid))
 
@@ -46,7 +52,7 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
                     )
                 }
 
-                asteroidDatabase.asteroidDao.insertAll(*networkAsteroidList.asDatabaseModel().toTypedArray())
+                asteroidDatabase.asteroidDao.insertAll(*networkAsteroidList.asAsteroidDatabaseModel().toTypedArray())
 
             } catch (e : Exception) {
                 Log.i("INSERTING_ERROR","Error inserting asteroid into database: $e")
@@ -57,6 +63,20 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
 
     suspend fun refreshPictureOfDay () {
+        withContext(Dispatchers.IO) {
 
+            try {
+                val pictureOfDay = NasaApi.imageOfTheDayRetrofitService.getNasaImageOfTheDay(Constants.API_KEY)
+
+                pictureOfDay.let {
+                    asteroidDatabase.pictureOfDayDao.insertPictureOfDay(it?.asPictureOfDayDatabaseModel())
+                }
+
+            } catch (e : Exception) {
+
+                Log.i("INSERTING_PICTURE_ERROR","Error inserting picture into database: $e")
+            }
+
+        }
     }
 }
