@@ -1,7 +1,5 @@
 package com.udacity.asteroidradar.main
 
-import android.accounts.AccountManager.get
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -11,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
-import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 
