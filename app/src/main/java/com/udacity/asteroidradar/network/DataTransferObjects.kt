@@ -1,10 +1,13 @@
 package com.udacity.asteroidradar.network
 
+import androidx.lifecycle.Transformations.map
 import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.udacity.asteroidradar.database.AsteroidDatabaseEntities
 import com.udacity.asteroidradar.domain.Asteroid
 
+@JsonClass(generateAdapter = true)
 data class NetworkAsteroidContainer (
     val asteroid : List<NetworkAsteroid>
 )
@@ -27,13 +30,28 @@ data class NetworkAsteroid constructor(
 )
 
 
+
+/**
+ * Representing a picture in kotlin object for json data
+ * */
+@JsonClass(generateAdapter = true)
+data class PictureOfDay(
+    @Json(name = "media_type")
+    val mediaType: String,
+    val title: String,
+    @PrimaryKey
+    val url: String
+)
+
+
+
+
 /**
  * Extension function that convert from network object to database objects
  * */
 
-fun NetworkAsteroidContainer.asDatabaseModel () : List<AsteroidDatabaseEntities> {
-
-    return asteroid.map {networkAsteroid ->
+fun List<NetworkAsteroid>.asDatabaseModel () : List<AsteroidDatabaseEntities> {
+    return map {networkAsteroid ->
         AsteroidDatabaseEntities(
             id = networkAsteroid.id,
             codename = networkAsteroid.codename,
@@ -46,3 +64,5 @@ fun NetworkAsteroidContainer.asDatabaseModel () : List<AsteroidDatabaseEntities>
         )
     }
 }
+
+

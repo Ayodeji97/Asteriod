@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.domain.Asteroid
-import com.udacity.asteroidradar.PictureOfDay
+import com.udacity.asteroidradar.domain.PictureOfDay
 import com.udacity.asteroidradar.api.parseStringToAsteroidList
 import com.udacity.asteroidradar.network.NasaApi
 import com.udacity.asteroidradar.utils.Constants
@@ -24,43 +24,43 @@ class MainViewModel : ViewModel() {
 //    val currentDate = Calendar.getInstance().time
 //    val formattedDate = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
 
-    init {
-        getAllAsteroid("2021-05-14", "2021-05-16", Constants.API_KEY)
+//    init {
+//        getAllAsteroid("2021-05-14", "2021-05-16", Constants.API_KEY)
+//
+//        getNasaImageOfTheDay(Constants.API_KEY)
+//    }
 
-        getNasaImageOfTheDay(Constants.API_KEY)
-    }
-
-    private fun getAllAsteroid(startDate: String, endDate: String, apiKey: String) {
-
-        viewModelScope.launch {
-            try {
-                val asteroidList =
-                    NasaApi.retrofitService.getAllAsteroids(startDate, endDate, apiKey)
-               // val result = parseAsteroidsJsonResult(JSONObject(asteroidList))
-                val result = parseStringToAsteroidList(asteroidList)
-                Log.i("SEEEEE", "$result")
-                println(result)
-                _asteroid.value = result
-            } catch (e: Exception) {
-                print(e.toString())
-                Log.i("FIRST", "${e.toString()}")
-            }
-        }
-
-    }
+//    private fun getAllAsteroid(startDate: String, endDate: String, apiKey: String) {
+//
+//        viewModelScope.launch {
+//            try {
+//                val asteroidList =
+//                    NasaApi.retrofitService.getAllAsteroids(startDate, endDate, apiKey)
+//               // val result = parseAsteroidsJsonResult(JSONObject(asteroidList))
+//                val result = parseStringToAsteroidList(asteroidList)
+//                Log.i("SEEEEE", "$result")
+//                println(result)
+//                _asteroid.value = result
+//            } catch (e: Exception) {
+//                print(e.toString())
+//                Log.i("FIRST", "${e.toString()}")
+//            }
+//        }
+//
+//    }
 
 
-    private fun getNasaImageOfTheDay(apiKey: String) {
-
-        viewModelScope.launch {
-            try {
-                val nasaImage = NasaApi.imageOfTheDayRetrofitService.getNasaImageOfTheDay(apiKey)
-                Log.i("IMAGEEE", "$nasaImage")
-                _imageOfTheDay.value = nasaImage
-            } catch (e: Exception) {
-                print(e.toString())
-                Log.i("ERRRR", "${e.toString()}")
-            }
-        }
-    }
+//    private fun getNasaImageOfTheDay(apiKey: String) {
+//
+//        viewModelScope.launch {
+//            try {
+//                val nasaImage = NasaApi.imageOfTheDayRetrofitService.getNasaImageOfTheDay(apiKey)
+//                Log.i("IMAGEEE", "$nasaImage")
+//                _imageOfTheDay.value = nasaImage
+//            } catch (e: Exception) {
+//                print(e.toString())
+//                Log.i("ERRRR", "${e.toString()}")
+//            }
+//        }
+//    }
 }

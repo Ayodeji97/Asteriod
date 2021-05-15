@@ -5,15 +5,20 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.udacity.asteroidradar.domain.Asteroid
+
 
 @Dao
 interface AsteroidDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll (vararg asteroid: Asteroid)
+    suspend fun insertAll (vararg asteroids : AsteroidDatabaseEntities)
 
    @Query("SELECT * from asteroid_table")
-    suspend fun getAsteroids () : LiveData<String>
+    fun getAsteroids () : LiveData<List<AsteroidDatabaseEntities>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPictureOfDay (pictureOfDayEntities: PictureOfDayEntities)
+
+
 
 }
