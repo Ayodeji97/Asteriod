@@ -10,7 +10,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 object NasaApi {
 
     val retrofitService : NasaApiService by lazy {
-        retrofit.create(NasaApiService::class.java)
+       asteroidRetrofit.create(NasaApiService::class.java)
     }
 
     val imageOfTheDayRetrofitService : PictureOfDayService by lazy {
@@ -27,5 +27,9 @@ private val moshi = Moshi.Builder()
 private val retrofit = Retrofit.Builder()
     .baseUrl(Constants.BASE_URL)
     .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .build()
+
+private val asteroidRetrofit = Retrofit.Builder()
+    .baseUrl(Constants.BASE_URL)
     .addConverterFactory(ScalarsConverterFactory.create())
     .build()

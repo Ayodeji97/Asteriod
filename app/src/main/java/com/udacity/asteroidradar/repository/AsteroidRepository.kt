@@ -22,6 +22,7 @@ import java.lang.Exception
 class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
     val asteroid : LiveData<List<Asteroid>> = Transformations.map(asteroidDatabase.asteroidDao.getAsteroids()) {
+
         it.asDomainModel()
     }
 
@@ -30,7 +31,7 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
     }
 
 
-    suspend fun refreshAsteroids () {
+  suspend fun refreshAsteroids () {
         withContext(context = Dispatchers.IO) {
 
             try {
@@ -62,13 +63,15 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
     }
 
 
-    suspend fun refreshPictureOfDay () {
-        withContext(Dispatchers.IO) {
+  suspend fun refreshPictureOfDay () {
 
+        withContext(Dispatchers.IO) {
             try {
                 val pictureOfDay = NasaApi.imageOfTheDayRetrofitService.getNasaImageOfTheDay(Constants.API_KEY)
 
-                pictureOfDay.let {
+
+
+                pictureOfDay?.let {
                     asteroidDatabase.pictureOfDayDao.insertPictureOfDay(it?.asPictureOfDayDatabaseModel())
                 }
 
@@ -77,6 +80,14 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
                 Log.i("INSERTING_PICTURE_ERROR","Error inserting picture into database: $e")
             }
 
+        }
+    }
+
+
+    suspend fun refreshAll () {
+        withContext(Dispatchers.IO) {
+            refreshAsteroids()
+            refreshPictureOfDay()
         }
     }
 }

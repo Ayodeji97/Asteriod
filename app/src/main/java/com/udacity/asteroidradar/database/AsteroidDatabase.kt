@@ -17,7 +17,7 @@ abstract class AsteroidDatabase : RoomDatabase() {
     companion object {
 
         @Volatile
-        private lateinit var INSTANCE : AsteroidDatabase
+        private var INSTANCE : AsteroidDatabase? = null
 
         fun getDatabaseInstance (context: Context) : AsteroidDatabase {
             synchronized(this) {

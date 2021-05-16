@@ -1,66 +1,75 @@
 package com.udacity.asteroidradar.main
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.udacity.asteroidradar.domain.Asteroid
+import android.app.Application
+import androidx.lifecycle.*
+import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.domain.PictureOfDay
-import com.udacity.asteroidradar.api.parseStringToAsteroidList
-import com.udacity.asteroidradar.network.NasaApi
-import com.udacity.asteroidradar.utils.Constants
+import com.udacity.asteroidradar.repository.AsteroidRepository
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
 
-    private val _asteroid = MutableLiveData<List<Asteroid>>()
-    val asteroid: LiveData<List<Asteroid>>
-        get() = _asteroid
-
-    private val _imageOfTheDay = MutableLiveData<PictureOfDay>()
-    val imageOfTheDay: LiveData<PictureOfDay>
-        get() = _imageOfTheDay
-//    val currentDate = Calendar.getInstance().time
-//    val formattedDate = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
-
-//    init {
-//        getAllAsteroid("2021-05-14", "2021-05-16", Constants.API_KEY)
-//
-//        getNasaImageOfTheDay(Constants.API_KEY)
-//    }
-
-//    private fun getAllAsteroid(startDate: String, endDate: String, apiKey: String) {
-//
-//        viewModelScope.launch {
-//            try {
-//                val asteroidList =
-//                    NasaApi.retrofitService.getAllAsteroids(startDate, endDate, apiKey)
-//               // val result = parseAsteroidsJsonResult(JSONObject(asteroidList))
-//                val result = parseStringToAsteroidList(asteroidList)
-//                Log.i("SEEEEE", "$result")
-//                println(result)
-//                _asteroid.value = result
-//            } catch (e: Exception) {
-//                print(e.toString())
-//                Log.i("FIRST", "${e.toString()}")
-//            }
-//        }
-//
-//    }
-
-
-//    private fun getNasaImageOfTheDay(apiKey: String) {
-//
-//        viewModelScope.launch {
-//            try {
-//                val nasaImage = NasaApi.imageOfTheDayRetrofitService.getNasaImageOfTheDay(apiKey)
-//                Log.i("IMAGEEE", "$nasaImage")
-//                _imageOfTheDay.value = nasaImage
-//            } catch (e: Exception) {
-//                print(e.toString())
-//                Log.i("ERRRR", "${e.toString()}")
-//            }
-//        }
-//    }
+enum class AsteroidApiStatus {
+    LOADING,
+    DONE,
+    ERROR
 }
+
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+
+
+    // Get reference to database instance
+    private val database = AsteroidDatabase.getDatabaseInstance(application)
+
+    // Get reference to repository
+    private val asteroidRepository = AsteroidRepository(database)
+
+
+    private val _status = MutableLiveData<AsteroidApiStatus>()
+
+    private val _pictureOfTheDay = MutableLiveData<PictureOfDay>()
+
+
+    val status: LiveData<AsteroidApiStatus>
+        get() = _status
+
+    val pictureOfDay: LiveData<PictureOfDay>
+        get() = _pictureOfTheDay
+
+
+    val asteroidList = asteroidRepository.asteroid
+    val pictureOfTheDay = asteroidRepository.pictureOfDay
+
+
+
+    init {
+        getAllAsteroidAndPicOfDay()
+        asteroidList
+        pictureOfTheDay
+        getAsteroid()
+
+    }
+
+
+    private fun getAllAsteroidAndPicOfDay () {
+        viewModelScope.launch {
+            _status.value = AsteroidApiStatus.LOADING
+            asteroidRepository.refreshAll()
+            _status.value = AsteroidApiStatus.DONE
+        }
+    }
+
+    private fun getAsteroid () {
+        viewModelScope.launch {
+            asteroidRepository.refreshAsteroids()
+            asteroidRepository.refreshPictureOfDay()
+        }
+    }
+
+
+}
+
+
+
+
+
+

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +19,6 @@ class MainFragment : Fragment() {
     private lateinit var asteroidAdapter: AsteroidAdapter
 
   //  private val asteroidList = generateDummyList(100)
-
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
@@ -41,23 +41,6 @@ class MainFragment : Fragment() {
 
         binding.asteroidRecycler.adapter = asteroidAdapter
 
-        // dummy data
-        //asteroidAdapter.submitList(asteroidList)
-
-        viewModel.asteroid.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                asteroidAdapter.submitList(it)
-            }
-        })
-
-
-        // image
-        viewModel.imageOfTheDay.observe(viewLifecycleOwner, Observer {pictureOfDay ->
-            Picasso.with(requireContext()).apply {
-                Log.i("MAINFRAGMENT", "${pictureOfDay.url}")
-                load(pictureOfDay.url).into(binding.activityMainImageOfTheDay)
-            }
-        })
 
         setHasOptionsMenu(true)
 

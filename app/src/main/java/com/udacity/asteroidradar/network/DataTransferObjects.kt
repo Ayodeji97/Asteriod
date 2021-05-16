@@ -8,10 +8,10 @@ import com.udacity.asteroidradar.database.AsteroidDatabaseEntities
 import com.udacity.asteroidradar.database.PictureOfDayEntities
 import com.udacity.asteroidradar.domain.PictureOfDay
 
-@JsonClass(generateAdapter = true)
-data class NetworkAsteroidContainer (
-    val asteroid : List<NetworkAsteroid>
-)
+//@JsonClass(generateAdapter = true)
+//data class NetworkAsteroidContainer (
+//    val asteroid : List<NetworkAsteroid>
+//)
 
 
 /**
@@ -35,14 +35,14 @@ data class NetworkAsteroid constructor(
 /**
  * Representing a picture in kotlin object for json data
  * */
-@JsonClass(generateAdapter = true)
-data class NetworkPictureOfDay(
-    @Json(name = "media_type")
-    val mediaType: String,
-    val title: String,
-    @PrimaryKey
-    val url: String
-)
+//@JsonClass(generateAdapter = true)
+//data class NetworkPictureOfDay(
+//    @Json(name = "media_type")
+//    val mediaType: String,
+//    val title: String,
+//    @PrimaryKey
+//    val url: String
+//)
 
 
 /**
