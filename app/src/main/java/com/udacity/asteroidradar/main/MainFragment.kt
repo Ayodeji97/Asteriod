@@ -18,7 +18,7 @@ class MainFragment : Fragment() {
 
     private lateinit var asteroidAdapter: AsteroidAdapter
 
-  //  private val asteroidList = generateDummyList(100)
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
@@ -36,6 +36,18 @@ class MainFragment : Fragment() {
         asteroidAdapter = AsteroidAdapter(AsteroidAdapter.AsteroidClickListener {asteroidId ->
             Toast.makeText(requireContext(), "Asteroid $asteroidId", Toast.LENGTH_SHORT).show()
         })
+
+        viewModel.pictureOfTheDay.observe(viewLifecycleOwner, Observer {
+            Picasso.with(requireContext()).load(it.url).into(binding.activityMainImageOfTheDay)
+        })
+
+
+        viewModel.asteroidList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                asteroidAdapter.submitList(it)
+            }
+        })
+
 
         binding.asteroidRecycler.layoutManager = LinearLayoutManager(requireContext())
 

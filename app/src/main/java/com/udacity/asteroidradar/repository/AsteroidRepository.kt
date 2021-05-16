@@ -22,7 +22,6 @@ import java.lang.Exception
 class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
     val asteroid : LiveData<List<Asteroid>> = Transformations.map(asteroidDatabase.asteroidDao.getAsteroids()) {
-
         it.asDomainModel()
     }
 
@@ -31,7 +30,7 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
     }
 
 
-  suspend fun refreshAsteroids () {
+  private suspend fun refreshAsteroids () {
         withContext(context = Dispatchers.IO) {
 
             try {
@@ -63,13 +62,11 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
     }
 
 
-  suspend fun refreshPictureOfDay () {
+  private suspend fun refreshPictureOfDay () {
 
         withContext(Dispatchers.IO) {
             try {
                 val pictureOfDay = NasaApi.imageOfTheDayRetrofitService.getNasaImageOfTheDay(Constants.API_KEY)
-
-
 
                 pictureOfDay?.let {
                     asteroidDatabase.pictureOfDayDao.insertPictureOfDay(it?.asPictureOfDayDatabaseModel())

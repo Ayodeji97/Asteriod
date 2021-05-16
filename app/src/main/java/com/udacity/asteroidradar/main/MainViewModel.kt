@@ -43,10 +43,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         getAllAsteroidAndPicOfDay()
-        asteroidList
-        pictureOfTheDay
-        getAsteroid()
-
     }
 
 
@@ -58,12 +54,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun getAsteroid () {
-        viewModelScope.launch {
-            asteroidRepository.refreshAsteroids()
-            asteroidRepository.refreshPictureOfDay()
-        }
-    }
+
 
 
 }
