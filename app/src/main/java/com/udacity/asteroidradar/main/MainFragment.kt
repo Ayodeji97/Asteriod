@@ -38,6 +38,9 @@ class MainFragment : Fragment() {
         })
 
         viewModel.pictureOfTheDay.observe(viewLifecycleOwner, Observer {
+            if (it == null) {
+                Log.i("NULLCHECK","Picture of day is null")
+            }
             Picasso.with(requireContext()).load(it.url).into(binding.activityMainImageOfTheDay)
         })
 

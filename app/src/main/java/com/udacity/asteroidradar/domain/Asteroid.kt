@@ -19,9 +19,3 @@ data class Asteroid (
 )
 
 
-
-/**
- * Extension function which convert from database objects to domain objects (network object)
- * or converting from database objects to model object in the network package
- * */
-

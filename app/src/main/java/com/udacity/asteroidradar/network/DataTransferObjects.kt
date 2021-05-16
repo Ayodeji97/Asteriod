@@ -6,6 +6,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.udacity.asteroidradar.database.AsteroidDatabaseEntities
 import com.udacity.asteroidradar.database.PictureOfDayEntities
+import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
 
 //@JsonClass(generateAdapter = true)

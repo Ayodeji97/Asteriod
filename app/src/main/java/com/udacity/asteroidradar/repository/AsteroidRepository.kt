@@ -34,9 +34,7 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
         withContext(context = Dispatchers.IO) {
 
             try {
-
                 val asteroid = NasaApi.retrofitService.getAllAsteroids("2021-05-14", "2021-05-16", Constants.API_KEY)
-
                 val parsedAsteroids = parseAsteroidsJsonResult(JSONObject(asteroid))
 
                 val networkAsteroidList = parsedAsteroids.map {
