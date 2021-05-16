@@ -11,17 +11,16 @@ import androidx.room.Query
 interface AsteroidDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll (vararg asteroids : AsteroidDatabaseEntities)
+    suspend fun insertAll (vararg asteroids : AsteroidEntity)
 
-   @Query("SELECT * from asteroid_table ORDER BY id DESC")
-    fun getAsteroids () : LiveData<List<AsteroidDatabaseEntities>>
+   @Query("SELECT * from asteroid_table ORDER BY closeApproachDate DESC")
+    fun getAsteroids () : LiveData<List<AsteroidEntity>>
 
+    @Query("SELECT * from asteroid_table WHERE closeApproachDate = :currentDate ORDER BY closeApproachDate DESC")
+    fun getTodayAsteroids (currentDate : String) : LiveData<List<AsteroidEntity>>
 
-    /**
-     * Return the latest asteroid
-     * */
-    @Query("SELECT * FROM asteroid_table ORDER BY id DESC LIMIT 1")
-    suspend fun getTodayAsteroid () : AsteroidDatabaseEntities?
+    @Query("SELECT * FROM asteroid_table WHERE closeApproachDate BETWEEN :currentDate AND :endDate ORDER BY closeApproachDate DESC")
+    fun getWeekAsteroids (currentDate : String, endDate : String) : LiveData<List<AsteroidEntity>>
 
     /**
      * Deletes all values from the table.
@@ -33,7 +32,7 @@ interface AsteroidDao {
 
 
     @Query("SELECT * FROM asteroid_table WHERE id = :key")
-    fun getAsteroidWithId(key : Long) : LiveData<List<AsteroidDatabaseEntities>>
+    fun getAsteroidWithId(key : Long) : LiveData<List<AsteroidEntity>>
 
 
 

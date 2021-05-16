@@ -1,13 +1,11 @@
-package com.udacity.asteroidradar.domain
+package com.udacity.asteroidradar.database
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.udacity.asteroidradar.database.AsteroidDatabase
-import kotlinx.android.parcel.Parcelize
 
-data class Asteroid (
-    @PrimaryKey
+@Entity(tableName = "asteroid_table")
+data class AsteroidEntity (
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
     val codename: String,
     val closeApproachDate: String,
@@ -17,5 +15,3 @@ data class Asteroid (
     val distanceFromEarth: Double,
     val isPotentiallyHazardous: Boolean
 )
-
-

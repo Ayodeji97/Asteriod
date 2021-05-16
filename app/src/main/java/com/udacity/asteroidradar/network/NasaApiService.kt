@@ -14,11 +14,7 @@ interface NasaApiService {
     ) : String
 }
 
-enum class NasaApiFilter(val value : String) {
-    SHOW_WEEK("week"),
-    SHOW_TODAY("today"),
-    SHOW_SAVE("saved")
-}
+
 
 
 

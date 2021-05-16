@@ -8,7 +8,7 @@
     <data>
         <variable
             name="asteriod"
-            type="com.udacity.asteroidradar.domain.Asteroid" />
+            type="com.udacity.asteroidradar.model.Asteroid" />
 
         <variable
             name="clickListener"

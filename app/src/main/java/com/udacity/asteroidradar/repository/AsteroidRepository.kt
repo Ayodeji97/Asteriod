@@ -2,60 +2,71 @@ package com.udacity.asteroidradar.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.dataMapper.asAsteroidDatabaseModel
+import com.udacity.asteroidradar.dataMapper.asAsteroidDomainModel
+import com.udacity.asteroidradar.network.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.AsteroidDatabase
-import com.udacity.asteroidradar.database.asDomainModel
 import com.udacity.asteroidradar.database.asPictureOfDayDomainModel
-import com.udacity.asteroidradar.domain.Asteroid
-import com.udacity.asteroidradar.domain.PictureOfDay
+import com.udacity.asteroidradar.model.Asteroid
+import com.udacity.asteroidradar.model.PictureOfDay
 import com.udacity.asteroidradar.network.NasaApi
-import com.udacity.asteroidradar.network.NetworkAsteroid
-import com.udacity.asteroidradar.network.asAsteroidDatabaseModel
-import com.udacity.asteroidradar.network.asPictureOfDayDatabaseModel
+import com.udacity.asteroidradar.utils.AsteroidFilters
 import com.udacity.asteroidradar.utils.Constants
+import com.udacity.asteroidradar.utils.DateCalculator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.lang.Exception
+import java.util.*
 
 class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
-    val asteroid : LiveData<List<Asteroid>> = Transformations.map(asteroidDatabase.asteroidDao.getAsteroids()) {
-        it.asDomainModel()
+    /**
+     * Get the current date
+     * */
+
+        private var currentDate = DateCalculator.getToday()
+        private var endDate = DateCalculator.getNextSevenDay()
+
+
+
+    val allAsteroids : LiveData<List<Asteroid>> =
+        Transformations.map(asteroidDatabase.asteroidDao.getAsteroids()) {
+        it.asAsteroidDomainModel()
     }
 
 
+    val todayAsteroids : LiveData<List<Asteroid>> =
+        Transformations.map(asteroidDatabase.asteroidDao.getTodayAsteroids(currentDate)) {
+            it.asAsteroidDomainModel()
+        }
 
-    val pictureOfDay : LiveData<PictureOfDay> = Transformations.map(asteroidDatabase.pictureOfDayDao.getPictureOfDay()) {
-        it?.asPictureOfDayDomainModel()
-    }
+    val weekAsteroids : LiveData<List<Asteroid>> =
+        Transformations.map(asteroidDatabase.asteroidDao.getWeekAsteroids(currentDate, endDate)) {
+            it.asAsteroidDomainModel()
+        }
 
 
-  private suspend fun refreshAsteroids () {
+
+    suspend fun refreshAsteroids () {
         withContext(context = Dispatchers.IO) {
 
-            try {
-                val asteroid = NasaApi.retrofitService.getAllAsteroids("2021-05-14", "2021-05-16", Constants.API_KEY)
-                val parsedAsteroids = parseAsteroidsJsonResult(JSONObject(asteroid))
+            withContext(Dispatchers.IO) {
 
-                val networkAsteroidList = parsedAsteroids.map {
-                    NetworkAsteroid(
-                        it.id,
-                        it.codename,
-                        it.closeApproachDate,
-                        it.absoluteMagnitude,
-                        it.estimatedDiameter,
-                        it.relativeVelocity,
-                        it.distanceFromEarth,
-                        it.isPotentiallyHazardous
-                    )
+                try {
+
+                    val asteroids = NasaApi.retrofitService.getAllAsteroids(currentDate, endDate, Constants.API_KEY)
+
+                    val parsedAsteroids = parseAsteroidsJsonResult(JSONObject(asteroids))
+
+                    asteroidDatabase.asteroidDao.insertAll(*parsedAsteroids.asAsteroidDatabaseModel())
+
+
+                } catch (e : Exception) {
+                    Log.e("INSERTION ERROR", "Error inserting domain asteroids : $e")
                 }
-
-                asteroidDatabase.asteroidDao.insertAll(*networkAsteroidList.asAsteroidDatabaseModel().toTypedArray())
-
-            } catch (e : Exception) {
-                Log.i("INSERTING_ERROR","Error inserting asteroid into database: $e")
             }
 
         }
@@ -64,27 +75,14 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
   private suspend fun refreshPictureOfDay () {
 
-        withContext(Dispatchers.IO) {
-            try {
-                val pictureOfDay = NasaApi.imageOfTheDayRetrofitService.getNasaImageOfTheDay(Constants.API_KEY)
 
-                pictureOfDay?.let {
-                    asteroidDatabase.pictureOfDayDao.insertPictureOfDay(it?.asPictureOfDayDatabaseModel())
-                }
-
-            } catch (e : Exception) {
-
-                Log.i("INSERTING_PICTURE_ERROR","Error inserting picture into database: $e")
-            }
-
-        }
     }
 
 
-    suspend fun refreshAll () {
-        withContext(Dispatchers.IO) {
-            refreshAsteroids()
-            refreshPictureOfDay()
-        }
-    }
+//    suspend fun refreshAll () {
+//        withContext(Dispatchers.IO) {
+//            refreshAsteroids()
+//            refreshPictureOfDay()
+//        }
+//    }
 }

@@ -1,9 +1,8 @@
 package com.udacity.asteroidradar.network
 
-import com.udacity.asteroidradar.domain.PictureOfDay
+import com.udacity.asteroidradar.model.PictureOfDay
 import retrofit2.http.GET
 import retrofit2.http.Query
-
 
 interface PictureOfDayService {
     @GET("planetary/apod")
