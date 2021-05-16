@@ -1,12 +1,14 @@
 package com.udacity.asteroidradar.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.utils.AsteroidFilters
@@ -47,12 +49,12 @@ class MainFragment : Fragment() {
             Toast.makeText(requireContext(), "Asteroid $asteroidId", Toast.LENGTH_SHORT).show()
         })
 
-//        viewModel.pictureOfTheDay.observe(viewLifecycleOwner, Observer {
-//            if (it == null) {
-//                Log.i("NULLCHECK","Picture of day is null")
-//            }
-//            //Picasso.with(requireContext()).load(it.url).into(binding.activityMainImageOfTheDay)
-//        })
+        viewModel.picOfDay.observe(viewLifecycleOwner, Observer {
+            if (it == null) {
+                Log.i("NULLCHECK","Picture of day is null")
+            }
+            Picasso.with(requireContext()).load(it.url).into(binding.activityMainImageOfTheDay)
+        })
 
 
         viewModel.asteroidList.observe(viewLifecycleOwner, Observer {

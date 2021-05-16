@@ -1,12 +1,19 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.model.PictureOfDay
+import com.udacity.asteroidradar.network.NasaApi
+import com.udacity.asteroidradar.network.NasaApiService
 import com.udacity.asteroidradar.repository.AsteroidRepository
 import com.udacity.asteroidradar.utils.AsteroidFilters
+import com.udacity.asteroidradar.utils.Constants
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 
 enum class AsteroidApiStatus {
@@ -51,11 +58,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    val picOfDay = asteroidRepository.picOfDay
+
 
     init {
         viewModelScope.launch {
             asteroidRepository.refreshAsteroids()
-
+            asteroidRepository.refreshPictureOfDay()
+            refreshPicOfDay()
         }
     }
 
@@ -63,6 +73,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _asteroidFilter.postValue(filters)
     }
 
+    private suspend fun refreshPicOfDay () {
+        withContext(Dispatchers.IO) {
+
+            try {
+                _pictureOfTheDay.postValue(
+                    NasaApi.retrofitService.getNasaImageOfTheDay(Constants.API_KEY)
+                )
+            }
+            catch (e : Exception) {
+                Log.e("refreshPictureOfDay", e.printStackTrace().toString())
+            }
+        }
+    }
 
 
 

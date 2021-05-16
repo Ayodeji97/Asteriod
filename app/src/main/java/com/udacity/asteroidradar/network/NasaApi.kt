@@ -28,11 +28,6 @@ private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .build()
 
-//private val asteroidRetrofit = Retrofit.Builder()
-//    .baseUrl(Constants.BASE_URL)
-//    .addConverterFactory(ScalarsConverterFactory.create())
-//    .build()
-
 
 object NasaApi {
 
@@ -40,8 +35,6 @@ object NasaApi {
        retrofit.create(NasaApiService::class.java)
     }
 
-//    val imageOfTheDayRetrofitService : PictureOfDayService by lazy {
-//        retrofit.create(PictureOfDayService::class.java)
-//    }
+
 }
 
