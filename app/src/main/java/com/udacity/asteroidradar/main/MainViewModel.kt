@@ -33,8 +33,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val asteroidRepository = AsteroidRepository(database)
 
 
-    private val _asteroidFilter = MutableLiveData(AsteroidFilters.SHOW_TODAY)
-
+    /**
+     * Mutable live data
+     * */
+    private val _asteroidFilter = MutableLiveData(AsteroidFilters.SHOW_SAVE)
 
     private val _status = MutableLiveData<AsteroidApiStatus>()
 
@@ -43,6 +45,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _navigateToAsteroidDataDetail = MutableLiveData<Asteroid>()
 
 
+
+    /**
+     * Live data
+     * */
     val status: LiveData<AsteroidApiStatus>
         get() = _status
 
@@ -51,6 +57,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val navigateToAsteroidDataDetail : LiveData<Asteroid>
             get() = _navigateToAsteroidDataDetail
+
+
 
     /**
      * Func to navigate to details fragment based on the id
@@ -65,6 +73,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
+    /**
+     * Filter list based on enum selection
+     * */
+
     val asteroidList = Transformations.switchMap(_asteroidFilter) {input: AsteroidFilters? ->
         when (input) {
             AsteroidFilters.SHOW_TODAY -> asteroidRepository.todayAsteroids
@@ -75,6 +87,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     val picOfDay = asteroidRepository.picOfDay
+
+    val allAsteroids = asteroidRepository.allAsteroids
 
 
     init {

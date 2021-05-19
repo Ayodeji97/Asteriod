@@ -75,7 +75,7 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
      * */
 
     val picOfDay : LiveData<PictureOfDay> = Transformations.map(asteroidDatabase.pictureOfDayDao.getPictureOfDay()) {
-        it.asPicOfDayDomainModel()
+        it?.asPicOfDayDomainModel()
     }
 
 
