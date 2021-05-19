@@ -6,6 +6,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+/**
+ * Picture of Day interface containing func ready for implementation
+ * */
 @Dao
 interface PictureOfDayDao {
 

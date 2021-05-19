@@ -3,6 +3,9 @@ package com.udacity.asteroidradar.dataMapper
 import com.udacity.asteroidradar.database.AsteroidEntity
 import com.udacity.asteroidradar.model.Asteroid
 
+/**
+ * Asteroid mapper extension function to map database model to domain model
+ * */
 
 fun List<AsteroidEntity>.asAsteroidDomainModel() : List<Asteroid> {
 
@@ -20,6 +23,10 @@ fun List<AsteroidEntity>.asAsteroidDomainModel() : List<Asteroid> {
     }
 }
 
+
+/**
+ * Asteroid mapper extension function to map domain model to database model
+ * */
 
 fun List<Asteroid>.asAsteroidDatabaseModel() : Array<AsteroidEntity> {
 

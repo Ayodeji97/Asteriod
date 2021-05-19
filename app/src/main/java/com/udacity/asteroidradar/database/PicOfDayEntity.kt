@@ -4,7 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
-
+/**
+ * Picture Entity to mapper to network entity
+ * */
 @Entity(tableName = "picture_of_day_table")
 data class PicOfDayEntity (
     @Json(name = "media_type")

@@ -95,7 +95,6 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
             }
             catch (e : Exception) {
-
                 Log.e("PICTUREINSERTIONERROR", "Error inserting domain picOfDay : ${e.localizedMessage}")
             }
         }
