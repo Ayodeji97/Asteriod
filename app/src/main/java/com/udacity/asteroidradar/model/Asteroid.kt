@@ -5,7 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import kotlinx.android.parcel.Parcelize
-
+/**
+ * Asteroid model
+ * */
 @Parcelize
 data class Asteroid (
     @PrimaryKey

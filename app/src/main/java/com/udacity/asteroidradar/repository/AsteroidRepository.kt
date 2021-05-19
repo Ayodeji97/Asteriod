@@ -19,14 +19,18 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.lang.Exception
 
-
+/**
+ * [AsteroidRepository] : Normal class which serves as a playground for both domain and database data interaction and abstraction
+ * */
 class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
     /**
      * Get the current date
      * */
-
         private var currentDate = DateCalculator.getToday()
+    /**
+     * Get the next seven day date
+     * */
         private var endDate = DateCalculator.getNextSevenDay()
 
 
@@ -39,18 +43,26 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
     }
 
 
+    /**
+     * Get today asteroids
+     * */
     val todayAsteroids : LiveData<List<Asteroid>> =
         Transformations.map(asteroidDatabase.asteroidDao.getTodayAsteroids(currentDate)) {
             it.asAsteroidDomainModel()
         }
 
+    /**
+     * Get week asteroids
+     * */
     val weekAsteroids : LiveData<List<Asteroid>> =
         Transformations.map(asteroidDatabase.asteroidDao.getWeekAsteroids(currentDate, endDate)) {
             it.asAsteroidDomainModel()
         }
 
 
-
+    /**
+     * Suspend func to get asteroid from server and cache to database
+     * */
     suspend fun refreshAsteroids () {
         withContext(context = Dispatchers.IO) {
 
@@ -79,19 +91,19 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
     }
 
 
+    /**
+     * Suspend func to get picture from server and cache to database
+     * */
   suspend fun refreshPictureOfDay () {
-    //  Log.i("PICOFDAY", "$picOfDay")
+
         withContext(Dispatchers.IO) {
 
             try {
                 val picOfDay = NasaApi.retrofitService.getNasaImageOfTheDay(Constants.API_KEY)
 
-                Log.i("PICOFDAY", "$picOfDay")
-
                 picOfDay.let {
                     asteroidDatabase.pictureOfDayDao.insertPictureOfDay(picOfDay.asPicOfDayDatabase())
                 }
-
 
             }
             catch (e : Exception) {
