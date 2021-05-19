@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.database.AsteroidDatabase
+import com.udacity.asteroidradar.model.Asteroid
 import com.udacity.asteroidradar.model.PictureOfDay
 import com.udacity.asteroidradar.network.NasaApi
 import com.udacity.asteroidradar.network.NasaApiService
@@ -39,6 +40,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _pictureOfTheDay = MutableLiveData<PictureOfDay>()
 
+    private val _navigateToAsteroidDataDetail = MutableLiveData<Asteroid>()
+
 
     val status: LiveData<AsteroidApiStatus>
         get() = _status
@@ -46,6 +49,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val pictureOfDay: LiveData<PictureOfDay>
         get() = _pictureOfTheDay
 
+    val navigateToAsteroidDataDetail : LiveData<Asteroid>
+            get() = _navigateToAsteroidDataDetail
+
+    /**
+     * Func to navigate to details fragment based on the id
+     * */
+    fun onAsteroidClicked (asteroid: Asteroid) {
+        _navigateToAsteroidDataDetail.value = asteroid
+    }
+
+    fun onAsteroidNavigated () {
+        _navigateToAsteroidDataDetail.value = null
+    }
 
 
 

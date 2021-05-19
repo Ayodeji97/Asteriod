@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
@@ -45,8 +46,9 @@ class MainFragment : Fragment() {
         /**
          * Adapter TODO : check later for click
          * */
-        asteroidAdapter = AsteroidAdapter(AsteroidAdapter.AsteroidClickListener {asteroidId ->
-            Toast.makeText(requireContext(), "Asteroid $asteroidId", Toast.LENGTH_SHORT).show()
+        asteroidAdapter = AsteroidAdapter(AsteroidAdapter.AsteroidClickListener {asteroid ->
+            Toast.makeText(requireContext(), "Asteroid $asteroid", Toast.LENGTH_SHORT).show()
+                viewModel.onAsteroidClicked(asteroid)
         })
 
         viewModel.picOfDay.observe(viewLifecycleOwner, Observer {
@@ -60,6 +62,16 @@ class MainFragment : Fragment() {
         viewModel.asteroidList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 asteroidAdapter.submitList(it)
+            }
+        })
+
+        /**
+         * Navigate to the detail fragment
+         * */
+        viewModel.navigateToAsteroidDataDetail.observe(viewLifecycleOwner, Observer {asteroid ->
+            asteroid?.let {
+                this.findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
+                viewModel.onAsteroidNavigated()
             }
         })
 

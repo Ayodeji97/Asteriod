@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Asteroid (
     @PrimaryKey
     val id: Long,
@@ -16,6 +17,6 @@ data class Asteroid (
     val relativeVelocity: Double,
     val distanceFromEarth: Double,
     val isPotentiallyHazardous: Boolean
-)
+) : Parcelable
 
 

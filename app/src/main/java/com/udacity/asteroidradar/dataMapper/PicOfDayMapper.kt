@@ -4,7 +4,6 @@ import com.udacity.asteroidradar.database.PicOfDayEntity
 import com.udacity.asteroidradar.model.PictureOfDay
 
 fun PicOfDayEntity.asPicOfDayDomainModel () : PictureOfDay {
-
     return PictureOfDay(
         mediaType = this.mediaType,
         title = this.title,
