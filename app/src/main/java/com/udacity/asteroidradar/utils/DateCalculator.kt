@@ -3,6 +3,10 @@ package com.udacity.asteroidradar.utils
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+/**
+ * Date Calculator object to get today date and the next seven days
+ * */
 object DateCalculator {
 
     fun getToday () : String {

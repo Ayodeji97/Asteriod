@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.utils.AsteroidFilters
+import com.udacity.asteroidradar.utils.Constants
+import com.udacity.asteroidradar.utils.imageOfTheDay
 
 
 class MainFragment : Fragment() {
@@ -50,11 +52,15 @@ class MainFragment : Fragment() {
                 viewModel.onAsteroidClicked(asteroid)
         })
 
-        viewModel.picOfDay.observe(viewLifecycleOwner, Observer {
-            if (it == null) {
-                Log.i("NULLCHECK","Picture of day is null")
+        viewModel.picOfDay.observe(viewLifecycleOwner, Observer {pictureOfDay ->
+
+            if (pictureOfDay != null && pictureOfDay.mediaType == Constants.MEDIA_TYPE) {
+                Picasso.with(requireContext()).load(pictureOfDay.url).into(binding.activityMainImageOfTheDay)
             }
-           Picasso.with(requireContext()).load(it.url).into(binding.activityMainImageOfTheDay)
+            else {
+                Picasso.with(context).load(R.drawable.asteroid_safe).into(binding.activityMainImageOfTheDay)
+            }
+
         })
 
 

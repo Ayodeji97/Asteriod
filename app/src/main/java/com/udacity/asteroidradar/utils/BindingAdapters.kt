@@ -39,6 +39,7 @@ fun bindTextViewToKmUnit(textView: TextView, number: Double) {
     textView.text = String.format(context.getString(R.string.km_unit_format), number)
 }
 
+
 @BindingAdapter("velocityText")
 fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     val context = textView.context
@@ -47,7 +48,7 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 
 
 /**
- *
+ * Asteroid name
  * **/
 @BindingAdapter("asteroidName")
 fun TextView.setAsteroidName (item : Asteroid) {
@@ -56,6 +57,9 @@ fun TextView.setAsteroidName (item : Asteroid) {
     }
 }
 
+/**
+ * Close Approach date
+ * */
 @BindingAdapter("asteroidDate")
 fun TextView.setAsteroidData (item : Asteroid) {
     item?.let {
@@ -63,6 +67,10 @@ fun TextView.setAsteroidData (item : Asteroid) {
     }
 }
 
+
+/**
+ * Status emoji to display
+ * */
 @BindingAdapter("bindStatus")
 fun ImageView.bindStatus (item: Asteroid) {
 
@@ -74,10 +82,12 @@ fun ImageView.bindStatus (item: Asteroid) {
     }
 }
 
+
+/**
+ * Binding adapter for image of the day
+ */
 @BindingAdapter("imageOfTheDay")
 fun ImageView.imageOfTheDay (item : PictureOfDay) {
-
-
     item?.let {
         when(item.mediaType) {
             Constants.MEDIA_TYPE -> Picasso.with(context).load(item.url)
