@@ -47,7 +47,6 @@ class MainFragment : Fragment() {
          * Adapter TODO : check later for click
          * */
         asteroidAdapter = AsteroidAdapter(AsteroidAdapter.AsteroidClickListener {asteroid ->
-            Toast.makeText(requireContext(), "Asteroid $asteroid", Toast.LENGTH_SHORT).show()
                 viewModel.onAsteroidClicked(asteroid)
         })
 

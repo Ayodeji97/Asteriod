@@ -17,11 +17,6 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 
-enum class AsteroidApiStatus {
-    LOADING,
-    DONE,
-    ERROR
-}
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -32,13 +27,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // Get reference to repository
     private val asteroidRepository = AsteroidRepository(database)
 
+    val picOfDay = asteroidRepository.picOfDay
+
+    val allAsteroids = asteroidRepository.allAsteroids
+
 
     /**
      * Mutable live data
      * */
     private val _asteroidFilter = MutableLiveData(AsteroidFilters.SHOW_SAVE)
-
-    private val _status = MutableLiveData<AsteroidApiStatus>()
 
     private val _pictureOfTheDay = MutableLiveData<PictureOfDay>()
 
@@ -49,11 +46,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Live data
      * */
-    val status: LiveData<AsteroidApiStatus>
-        get() = _status
-
-    val pictureOfDay: LiveData<PictureOfDay>
-        get() = _pictureOfTheDay
 
     val navigateToAsteroidDataDetail : LiveData<Asteroid>
             get() = _navigateToAsteroidDataDetail
@@ -85,10 +77,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
     }
-
-    val picOfDay = asteroidRepository.picOfDay
-
-    val allAsteroids = asteroidRepository.allAsteroids
 
 
     init {
