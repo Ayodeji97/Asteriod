@@ -9,6 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
+/**
+ * Application class that will live as long as the app is alive
+ * */
 class AsteroidApplication : Application() {
 
     // move app initialisation from onCreate
@@ -19,11 +22,15 @@ class AsteroidApplication : Application() {
         delayInt()
     }
 
+    // Execute in the background
     private fun delayInt () = applicationScope.launch {
 
         setupRecurringWork()
     }
 
+    /**
+     * [setupRecurringWork] func responsible for periodic requesting of data...in this case once per day
+     * */
     private fun setupRecurringWork () {
 
 

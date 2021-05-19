@@ -7,6 +7,10 @@ import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.repository.AsteroidRepository
 import retrofit2.HttpException
 
+/**
+ * [RefreshDataWork] class responsible for scheduling the pull and caching of data from
+ * domain and database respectively
+ * */
 class RefreshDataWork (appContext : Context, params : WorkerParameters) : CoroutineWorker(appContext, params ) {
 
     // This is a suspend func and it will run on a background thread

@@ -27,8 +27,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // Get reference to repository
     private val asteroidRepository = AsteroidRepository(database)
 
+    // image of the day from repository : Domain
     val picOfDay = asteroidRepository.picOfDay
 
+    // Get all asteroids from repository : Domain
     val allAsteroids = asteroidRepository.allAsteroids
 
 
@@ -59,6 +61,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _navigateToAsteroidDataDetail.value = asteroid
     }
 
+
+    /**
+     * Func on nav completed
+     * */
     fun onAsteroidNavigated () {
         _navigateToAsteroidDataDetail.value = null
     }
@@ -79,14 +85,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    /**
+     * Call refresh method from repository as soon as the viewModel get initialised
+     * */
     init {
         viewModelScope.launch {
             asteroidRepository.refreshAsteroids()
             asteroidRepository.refreshPictureOfDay()
-            refreshPicOfDay()
+            //refreshPicOfDay()
         }
     }
 
+    // Click func to filter menu items based on enum parameters
     fun onClickedFilter (filters: AsteroidFilters) {
         _asteroidFilter.postValue(filters)
     }

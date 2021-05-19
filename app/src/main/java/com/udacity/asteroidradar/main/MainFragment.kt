@@ -46,12 +46,15 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         /**
-         * Adapter TODO : check later for click
+         * Adapter to handle click
          * */
         asteroidAdapter = AsteroidAdapter(AsteroidAdapter.AsteroidClickListener {asteroid ->
                 viewModel.onAsteroidClicked(asteroid)
         })
 
+        /**
+         * Load pic of day
+         * */
         viewModel.picOfDay.observe(viewLifecycleOwner, Observer {pictureOfDay ->
 
             if (pictureOfDay != null && pictureOfDay.mediaType == Constants.MEDIA_TYPE) {
@@ -63,7 +66,9 @@ class MainFragment : Fragment() {
 
         })
 
-
+        /**
+         * Submit list item to recyclerview to display
+         * */
         viewModel.asteroidList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 asteroidAdapter.submitList(it)
@@ -80,7 +85,9 @@ class MainFragment : Fragment() {
             }
         })
 
-
+    /**
+     * Specifies the layout type
+     * */
         binding.asteroidRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         binding.asteroidRecycler.adapter = asteroidAdapter
@@ -92,7 +99,9 @@ class MainFragment : Fragment() {
     }
 
 
-
+/**
+ * Menu item overrides methods
+ * */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_overflow_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)

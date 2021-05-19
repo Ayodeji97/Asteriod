@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!--List item for recyclerview -->
 <layout
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,6 +15,8 @@
             type="com.udacity.asteroidradar.main.AsteroidAdapter.AsteroidClickListener" />
     </data>
 
+
+<!--    Constraint layout -->
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
