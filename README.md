@@ -2,7 +2,7 @@
 
 Asteroid is an application that makes use of free open source API provided by NASA JPL asteroid team.
 
-_This is a custom application in request from Udacity Android Nanodegree Programme._
+_This is a custom application built and reviewed by Udacity Android Nanodegree Programme expert._
 
 ## Feature
 * Kotlin Coroutine for async operations
