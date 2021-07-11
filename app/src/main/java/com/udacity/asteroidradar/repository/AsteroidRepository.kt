@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.udacity.asteroidradar.BuildConfig
 import com.udacity.asteroidradar.dataMapper.asAsteroidDatabaseModel
 import com.udacity.asteroidradar.dataMapper.asAsteroidDomainModel
 import com.udacity.asteroidradar.dataMapper.asPicOfDayDatabase
@@ -13,6 +14,7 @@ import com.udacity.asteroidradar.model.Asteroid
 import com.udacity.asteroidradar.model.PictureOfDay
 import com.udacity.asteroidradar.network.NasaApi
 import com.udacity.asteroidradar.utils.Constants
+import com.udacity.asteroidradar.utils.Constants.API_KEY
 import com.udacity.asteroidradar.utils.DateCalculator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -68,6 +70,7 @@ class AsteroidRepository (private val asteroidDatabase: AsteroidDatabase) {
 
                 try {
 
+                    //val apiKey = BuildConfig.API_KEY
                     val asteroids = NasaApi.retrofitService.getAllAsteroids(currentDate, endDate, Constants.API_KEY)
 
                     val parsedAsteroids = parseAsteroidsJsonResult(JSONObject(asteroids))

@@ -35,6 +35,5 @@ object NasaApi {
        retrofit.create(NasaApiService::class.java)
     }
 
-
 }
 
